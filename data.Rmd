@@ -1,0 +1,26 @@
+---
+title: "data"
+author: "Lucia Tan"
+date: "05/02/2022"
+output: html_document
+---
+
+```{r}
+data <- read_csv("hi.csv")
+```
+```{r}
+colors <- c("Women" = "blue", "Aboriginal" = "red", "PWD" = "orange", "Minority" = "darkgreen")
+
+ggplot(data, aes(x = year)) +
+    geom_line(aes(y = Women, color = "Women"), size = 1) +
+    geom_line(aes(y = Aboriginal, color = "Aboriginal"), size = 1) +
+    geom_line(aes(y = PWD, color = "PWD"), size = 1) +
+    geom_line(aes(y = Minority, color = "Minority"), size = 1) +
+    labs(x = "Year",
+         y = "Percentage",
+         color = "Legend") +
+    scale_color_manual(values = colors)+
+   theme_minimal()
+```
+
+
