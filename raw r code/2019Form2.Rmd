@@ -32,8 +32,37 @@ ggplot(df2, aes(x=OCCGROUP, y=value, fill=gender)) +
 
 ```{r}
 count2019 <- read.csv("2019Form2.csv")
+count2019[is.na(count2019)] <- 0 
 count2019 <- count2019 %>%
   filter(OCCGROUP == "Overall")%>%
-  summarise(sum(ALLCOUNT))
+  summarise(sum(ALLCOUNT), sum(ALLWOMENCOUNT), sum(ABORIGALLCOUNT),sum(PWDALLCOUNT), sum(VISMINALLCOUNT))
+
+promotion2019 <- read.csv("2019Form5.csv")
+promotion2019[is.na(promotion2019)] <- 0 
+promotion2019 <- promotion2019 %>%
+  filter(OCCGROUP == "Overall")%>%
+  summarise(sum(TOTALPROMOTIONS),sum(TOTALWOMENPROMOTIONS), sum(TOTALABORIGALLPROMOTIONS),sum(TOTALPWDALLPROMOTIONS), sum(TOTALVISMINALLPROMOTIONS))
+
+c(data_frame(count2019, promotion2019)[6]/data_frame(count2019, promotion2019)[1],
+data_frame(count2019, promotion2019)[7]/data_frame(count2019, promotion2019)[2],
+data_frame(count2019, promotion2019)[8]/data_frame(count2019, promotion2019)[3],
+data_frame(count2019, promotion2019)[9]/data_frame(count2019, promotion2019)[4],
+data_frame(count2019, promotion2019)[10]/data_frame(count2019, promotion2019)[5])
+```
+
+```{r}
+trend <- read.csv("trend.csv")
+colors <- c("Women" = "blue", "Aboriginal" = "red", "PWD" = "orange", "Minority" = "darkgreen", "Overall" = "black")
+
+
+ trend %>%
+   ggplot(aes(x=year)) +
+   geom_line(aes(y=sum.ALLCOUNT.,colour = "Overall"))+
+   geom_line(aes(y=sum.ALLWOMENCOUNT., colour = "Women"))+
+   geom_line(aes(y=sum.ABORIGALLCOUNT., colour = "Aboriginal"))+
+   geom_line(aes(y=sum.PWDALLCOUNT., colour = "PWD"))+
+   geom_line(aes(y=sum.VISMINALLCOUNT., colour = "Minority"))+
+   labs(y= "Promotion rate", colour="Legend",title = "Promotion Rate of the Underrepresented Group from 1997 to 2019")
+   
 ```
 
