@@ -6,21 +6,52 @@ output: html_document
 ---
 
 ```{r}
-data <- read_csv("hi.csv")
+data <- read_csv("hi.csv")%>% mutate(Overall_Unrepresented = Women+Aboriginal+PWD+Minority)
 ```
 ```{r}
-colors <- c("Women" = "blue", "Aboriginal" = "red", "PWD" = "orange", "Minority" = "darkgreen")
+colors <- c("Women" = "blue", "Aboriginal" = "red", "PWD" = "orange", "Minority" = "darkgreen", "Overall_Unrepresented" = "black")
 
 ggplot(data, aes(x = year)) +
     geom_line(aes(y = Women, color = "Women"), size = 1) +
     geom_line(aes(y = Aboriginal, color = "Aboriginal"), size = 1) +
     geom_line(aes(y = PWD, color = "PWD"), size = 1) +
     geom_line(aes(y = Minority, color = "Minority"), size = 1) +
+    geom_line(aes(y = Overall_Unrepresented, color = "Overall_Unrepresnted"), size = 1) +
     labs(x = "Year",
          y = "Percentage",
          color = "Legend") +
     scale_color_manual(values = colors)+
    theme_minimal()
 ```
+```{r}
+data_2016 <- read_csv("WD-OpenData-2016-CitizenEEOGs-EN.csv")
+```
 
+```{r}
+data_2016 <- data_2016 %>% filter(Region != "Canada")%>%
+   filter(str_detect(`Employment Equity Occupational Groups`, '^Total'))%>%
+  select(Region, `Aboriginal Peoples %`, `Aboriginal Peoples %`, `PWD %`, `Females %`)
+
+write.csv(data_2016,"region.csv")
+
+```
+
+```{r}
+data2 <- read_csv("re2.csv")%>% mutate(Overall_Unrepresented = Women+Aboriginal+PWD+Minority)
+```
+```{r}
+colors <- c("Women" = "blue", "Aboriginal" = "red", "PWD" = "orange", "Minority" = "darkgreen", "Overall_Unrepresented" = "black")
+
+ggplot(data2, aes(x = year)) +
+    geom_line(aes(y = Women, color = "Women"), size = 1) +
+    geom_line(aes(y = Aboriginal, color = "Aboriginal"), size = 1) +
+    geom_line(aes(y = PWD, color = "PWD"), size = 1) +
+    geom_line(aes(y = Minority, color = "Minority"), size = 1) +
+    geom_line(aes(y = Overall_Unrepresented, color = "Overall_Unrepresnted"), size = 1) +
+    labs(x = "Year",
+         y = "Percentage",
+         color = "Legend") +
+    scale_color_manual(values = colors)+
+   theme_minimal()
+```
 
